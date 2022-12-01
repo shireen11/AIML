@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd 	
 import matplotlib.pyplot as plt 
 import math
+from sklearn.model_selection import train_test_split
 
 
 class  NaiveBayes:
@@ -113,13 +114,22 @@ df = pd.read_csv('dataset.csv',delimiter="\t")
 X = df.drop([df.columns[-1]], axis = 1)
 y = df[df.columns[-1]]
 
+trainX, testX, trainY, testY=train_test_split(X,y, test_size = 0.3)
+
 clf = NaiveBayes()
-clf.fit(X, y)
+clf.fit(trainX, trainY)
 
 #Query 1
 query = np.array([['1','1', '1', '1']])
-print(clf.predict(query))
-print("Query 1:- {} ---> {}".format(query, clf.predict(query)))
+# print(clf.predict(testX))
+
+# print("Query 1:- {} ---> {}".format(query, clf.predict(query)))
+
+
+Y_pred = clf.predict(testX) 
+from sklearn.metrics import accuracy_score
+ans = accuracy_score(testY, Y_pred)
+print(ans)
 
 # #Query 2:
 # query = np.array([['Overcast','Cool', 'Normal', 't']])
@@ -128,5 +138,3 @@ print("Query 1:- {} ---> {}".format(query, clf.predict(query)))
 # #Query 3:
 # query = np.array([['Sunny','Hot', 'High', 't']])
 # print("Query 3:- {} ---> {}".format(query, clf.predict(query)))
-
-
